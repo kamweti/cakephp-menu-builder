@@ -1,0 +1,59 @@
+/************************************
+	menubuilder intallation details
+**********************************/
+
+copy folder menubuilder to app/plugins
+
+
+import  config/bootstrap.php in app/config/boostrap.php
+
+add this line in app/config/bootstrap.php
+
+// Import Plugin `menubuilder` bootstrap
+require_once (APP . 'plugins' . DS . 'menubuilder' . DS . 'config' . DS . 'bootstrap.php');
+
+
+
+add menubuilder tables to database
+
+CREATE TABLE `menus` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  `slug` varchar(100) DEFAULT NULL,
+  `status` int(11) DEFAULT '1' COMMENT '1=>active 0=>disabled',
+  `created` datetime DEFAULT NULL,
+  `deleted` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1
+
+
+CREATE TABLE `menu_items` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `menu_id` int(11) DEFAULT NULL COMMENT 'id of menu',
+  `label` varchar(100) DEFAULT NULL,
+  `url` varchar(80) DEFAULT NULL,
+  `controller` varchar(100) DEFAULT NULL,
+  `action` varchar(100) DEFAULT NULL,
+  `children` text COMMENT 'menuitem id of menu',
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=latin1
+
+Visit <your site url>/admin/menubuilder/menus to add a menu
+
+How to display the menu in your view file
+
+<?php
+	$current_ctlr=$this->params['controller']; //current controller
+	$current_actn=$this->params['action']; //current action
+	
+	$menuslug='backend'; //slug of the menu you want to display
+?>
+
+<?php echo $this->requestAction('/menubuilder/menus/display/',
+				array('pass'=>array($menuslug,$current_ctlr,$current_actn)) // pass current controller and action so as to set active menus
+			);
+ ?>
+
+
