@@ -50,16 +50,18 @@ If you have the ACL plugin installed build the new ACOs else skip this step
 
 Visit <your site url>/admin/menubuilder to add a menu
 
-How to display the menu in your view file
+How to display the menu in your view template preferrably in an element
 
 <?php
 	$current_ctlr=$this->params['controller']; //current controller
 	$current_actn=$this->params['action']; //current action
 	
 	$menuslug='backend'; //slug of the menu you want to display
-?>
 
-<?php echo $this->requestAction('/menubuilder/menus/display/',
-				array('pass'=>array($menuslug,$current_ctlr,$current_actn)) // pass current controller and action so as to set active menus
-			);
+		
+	$menu=$this->requestAction('/menubuilder/menus/display/',
+			array('pass'=>array($menuslug,$current_ctlr,$current_actn)) // pass current controller and action so as to set active menus
+		);
+		
+	echo $menu; //echo a nested <ul> of menu lists
  ?>
