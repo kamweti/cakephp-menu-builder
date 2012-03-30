@@ -4,12 +4,18 @@
 
 copy folder menubuilder to app/plugins
 
-import  config/bootstrap.php in app/config/boostrap.php
 
 add this line in app/config/bootstrap.php
 
 // Import Plugin `menubuilder` bootstrap
 require_once (APP . 'plugins' . DS . 'menubuilder' . DS . 'config' . DS . 'bootstrap.php');
+
+
+add this line to app/config/routes.php
+/**
+ * Plugin Admin Routing
+ */
+Router::connect ( '/menubuilder', array ('plugin' => 'menubuilder', 'controller' => 'menus', 'action' => 'index', 'admin' => true ) );
 
 
 
@@ -42,7 +48,7 @@ CREATE TABLE `menu_items` (
 
 If you have the ACL plugin installed build the new ACOs else skip this step
 
-Visit <your site url>/admin/menubuilder/menus to add a menu
+Visit <your site url>/admin/menubuilder to add a menu
 
 How to display the menu in your view file
 

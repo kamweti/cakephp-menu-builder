@@ -6,7 +6,7 @@
  * See how to include these settings in the README file
  */
 
-
 //exclude plugin controllers from being displayed as menu items default: true
 Configure :: write('exclude_plugin_controllers', true);
+
 ?>
