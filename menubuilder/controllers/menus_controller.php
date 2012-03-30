@@ -474,7 +474,7 @@ class MenusController extends MenuBuilderAppController{
 		
 		foreach($menuitems as $menu){
 			
-			$authorized = $this->Acl->check($user, $menu->action);
+			$authorized = $this->Acl->check($user, $menu->controller.'/'.$menu->action);
 			if(!$authorized) continue; //do not generate menu item if user is not allowed that action
 			
 	
