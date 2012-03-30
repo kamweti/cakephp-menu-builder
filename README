@@ -4,7 +4,6 @@
 
 copy folder menubuilder to app/plugins
 
-
 import  config/bootstrap.php in app/config/boostrap.php
 
 add this line in app/config/bootstrap.php
@@ -40,6 +39,9 @@ CREATE TABLE `menu_items` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=latin1
 
+
+If you have the ACL plugin installed build the new ACOs else skip this step
+
 Visit <your site url>/admin/menubuilder/menus to add a menu
 
 How to display the menu in your view file
@@ -55,5 +57,3 @@ How to display the menu in your view file
 				array('pass'=>array($menuslug,$current_ctlr,$current_actn)) // pass current controller and action so as to set active menus
 			);
  ?>
-
-
