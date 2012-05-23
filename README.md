@@ -9,13 +9,13 @@ Simple plugin to build and output custom menus in CakePHP
  
 ## Installation
  
-	- Copy folder menubuilder to app/plugins
+Copy folder menubuilder to app/plugins
 
-	- If you have the ACL plugin installed build the new ACOs else skip this step
+If you have the ACL plugin installed build the new ACOs else skip this step
 
 ### Database Tables
 	
-	Menubuilder depends on 2 tables 'menu' and 'menu_items',run the following mysql queries to add these tables to your database
+Menubuilder depends on 2 tables 'menu' and 'menu_items',run the following mysql queries to add these tables to your database
 
 		CREATE TABLE `menus` (
 		  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -40,18 +40,18 @@ Simple plugin to build and output custom menus in CakePHP
 		  PRIMARY KEY (`id`)
 		)
 
-		
-	Add the Menu helper in your controller file, preferably in app_controller.php
-
-		var $helpers=array('Menubuilder.Menu');
 	
-	-	Go to the plugin dashboard at <your site address>/admin/menubuilder/menus/ to build new menus
+- Add the Menu helper in your controller file, preferably in app_controller.php
 
-	-	Tag your menus by a slug which you'll use while displaying
+	var $helpers=array('Menubuilder.Menu');
+
+-	Go to the plugin dashboard at <your site address>/admin/menubuilder/menus/ to build new menus
+
+-	Tag your menus by a slug which you'll use while displaying
 		
-	Display a menu anywhere in your views by calling the helper method display and passing the 
-	
-	<?php $this->Menu->display('yourmenuslug'); ?>
+Display a menu anywhere in your views by calling the helper method display and passing the 
+
+<?php $this->Menu->display('yourmenuslug'); ?>
 	
 
 Profit!
