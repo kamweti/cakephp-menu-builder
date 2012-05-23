@@ -43,7 +43,7 @@ Menubuilder depends on 2 tables 'menu' and 'menu_items',run the following mysql 
 	
 - 	Add the Menu helper in your controller file, preferably in app_controller.php
 
-	var $helpers=array('Menubuilder.Menu');
+		var $helpers=array('Menubuilder.Menu');
 
 -	Go to the plugin dashboard at <your site address>/admin/menubuilder/menus/ to build new menus
 
