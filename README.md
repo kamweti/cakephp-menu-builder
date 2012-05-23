@@ -7,13 +7,13 @@ Simple plugin to build and output custom menus in CakePHP
  CakePHP 1.3
 
  
- ## Installation
+## Installation
  
 	- Copy folder menubuilder to app/plugins
 
 	- If you have the ACL plugin installed build the new ACOs else skip this step
 
-	### Database Tables
+### Database Tables
 	
 	Menubuilder depends on 2 tables 'menu' and 'menu_items',run the following mysql queries to add these tables to your database
 
