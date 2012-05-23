@@ -41,7 +41,7 @@ Menubuilder depends on 2 tables 'menu' and 'menu_items',run the following mysql 
 		)
 
 	
-- Add the Menu helper in your controller file, preferably in app_controller.php
+- 	Add the Menu helper in your controller file, preferably in app_controller.php
 
 	var $helpers=array('Menubuilder.Menu');
 
@@ -49,9 +49,9 @@ Menubuilder depends on 2 tables 'menu' and 'menu_items',run the following mysql 
 
 -	Tag your menus by a slug which you'll use while displaying
 		
-Display a menu anywhere in your views by calling the helper method display and passing the 
+-  	Display the menu anywhere in your views by calling the helper method display and passing the 
 
-<?php $this->Menu->display('yourmenuslug'); ?>
+		<?php $this->Menu->display('yourmenuslug'); ?>
 	
 
 Profit!
