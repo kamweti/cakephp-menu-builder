@@ -55,4 +55,3 @@ Menubuilder depends on 2 tables 'menu' and 'menu_items',run the following mysql 
 	
 
 -	Profit!
-a
