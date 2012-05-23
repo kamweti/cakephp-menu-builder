@@ -1,11 +1,12 @@
 <?php
-/**
+
+/** MenuBuilder Parent Model
  *
- * @author   Muriuki <kamweti.muriuki@squaddigital.com>
+ * @author   Muriuki <kamwetimuriuki@gmail.com>
  * @license  http://www.opensource.org/licenses/mit-license.php The MIT License
  * @link     
  */
-class MenuBuilderAppModel extends AppModel{
+class MenubuilderAppModel extends AppModel{
 	
 
 }

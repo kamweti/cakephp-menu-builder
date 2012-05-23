@@ -7,12 +7,18 @@
  */
 
  App::import('Sanitize');
+ App::import('Config','Menubuilder.MenuSettings');
  
-class MenusController extends MenuBuilderAppController{
+class MenusController extends MenubuilderAppController{
 	var $name="Menus";
 	var $components = array('Acl', 'Auth', 'Session');
-
+	var $menuconfig;
 	
+	function __construct(){
+		$this->menuconfig=new MenuSettings();
+		parent::__construct();
+	}
+		
 	function beforeFilter(){
 	    parent :: beforeFilter();
 		$this->Auth->allow('*');
@@ -47,7 +53,7 @@ class MenusController extends MenuBuilderAppController{
 		}
 
 
-		if(Configure::read('exclude_plugin_controllers')==false){
+		if( $this->menuconfig->defaults['exclude_plugin_controllers'] == false){
 			//fetch all plugin controllers
 			
 			$plugincontrollers=$this->get_all_plugins_controllers();
@@ -428,102 +434,7 @@ class MenusController extends MenuBuilderAppController{
 		exit;
 	}
 
-	/* 
-	 * Returns an html structure of a <ul> and nested <li> elements
-	 * that make the current users navigation
-	 *  
-	 * @params $slug lowercase menu slug
-	 * 		   $current_controller string the current app controller for the request
-	 * 		   $current_action string the current action for the request
-	 **/
-	function display($slug="",$current_controller="",$current_action=""){
-		$slug=Sanitize::clean($slug);
-		
-		$current_controller=Sanitize::clean($current_controller);
-		$current_action=Sanitize::clean($current_action);
-		
-		//set these variables to $this->params
-		$this->params['current_controller']=$current_controller;
-		$this->params['current_action']=$current_action; 
-		
-		
-		$this->autoRender=false; //no view rendered for this action
-		
-		//fetch the menu contains: menu,menuitems
-		$menu=$this->Menu->find('first',array('conditions'=>'Menu.slug="'.$slug.'"','contain'=>array('MenuItem')));
-		
-		$menuitems=$menu['MenuItem'];
-		
-		$menuitems=json_encode($menuitems); //convert menuItems array to json object
-		return $this->make_nav_lists($menuitems);
-
-	}
 	
-	/**
-	 * Make Navigation list elements
-	 * 
-	 * @params $menuitems array() an array pf menu items
-	 *	
-	 * generate list elements,recurse if menu has a second level
-	 */
-	function make_nav_lists($menuitems){
-		$menuitems=json_decode($menuitems); //decode json string of children
-		$navlists="<ul>";
-		
-		$user=$this->Session->read('Auth.User.username'); //get current user
-		
-		foreach($menuitems as $menu){
-			
-			$authorized = $this->Acl->check($user, $menu->controller.'/'.$menu->action);
-			if(!$authorized) continue; //do not generate menu item if user is not allowed that action
-			
-	
-			$navlists.="<li ".$this->is_current_controller($menu->controller).">";
-			$navlists.="<a href='".$menu->url."'><b ".$this->is_current_action($menu->controller,$menu->action).">".$menu->label."</b></a>";
-			
-			//if menu element has a children note: $menu->children is stored as a json string 
-			if(isset($menu->children) && $menu->children!='' ){
-
-				$navlists.="<ul>";
-				$navlists.=$this->make_nav_lists($menu->children);
-				$navlists.="</ul>";
-			}
-			$navlists.="</li></ul>";
-		}
-		return $navlists;
-	}
-	
-	
-	/**
-	 * Is Current Controller
-	 * 
-	 * @params $urlcontroller
-	 * checks if controller for the current link matches current controller,
-	 * then add class current to highlight it
-	 */
-	function is_current_controller($urlcontroller=""){
-		if($this->params['current_controller']==$urlcontroller){
-			return "class='current'";
-		}else{
-			return "";
-		}
-	}
-	
-	
-	/**
-	 * Is Current Action
-	 * 
-	 * @params $urlcontroller
-	 * checks if controller for the current link matches current controller,
-	 * then add class current to highlight it
-	 */
-	function is_current_action($urlcontroller="",$urlaction=""){
-		if($this->params['current_controller']==$urlcontroller && $this->params['current_action']==$urlaction){
-			return "class='active'";
-		}else{
-			return "";
-		}
-	}
 	
 }
 

@@ -1,5 +1,5 @@
 <?php
-class Menu extends MenuBuilderAppModel{
+class Menu extends MenubuilderAppModel{
 	var $name='Menu';
 	var $recursive=4;
 	var $actsAs=array('Containable');

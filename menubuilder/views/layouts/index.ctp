@@ -17,7 +17,7 @@
 <div class="navbar navbar-fixed-top">
 	<div class="navbar-inner">
 		<div class="container">
-			<a class="brand " href="#">MenuBuilder</a>
+			<a class="brand " href="<?php echo $this->Html->url(array("plugin"=>"menubuilder","controller" => "menus", "action" => "index"));?>">MenuBuilder</a>
 			<div class="nav-collapse">
 				<ul class="nav">
 					<li>
@@ -39,9 +39,6 @@
 		<?php echo $this->Session->flash(); ?>
 	</div>
 	<?php echo $content_for_layout; ?>
-	<div class="row">
-		<?php echo $this->element('sql_dump'); ?>
-	</div>
 </div>
 
 <?php echo $this->Html->script('/menubuilder/js/jquery1.7.js'); ?>
@@ -82,9 +79,12 @@
 		</h3>
 	</div>
 	<div class="modal-footer">
-	  <a href="#" class="btn btn-primary">Preview Menu</a>
+	  <!--<a href="#" class="btn btn-primary">Preview Menu</a>-->
 	  <a href="#" class="btn" data-dismiss="modal">Close</a>
 	</div>
 </script>
+<div class="row">
+	<?php //echo $this->element('sql_dump'); ?>
+</div>
 </body>
 </html>

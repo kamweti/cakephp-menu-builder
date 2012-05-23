@@ -15,7 +15,7 @@
 		<label class="add-left left">
 			<span class="block">Menu slug</span>
 			<input type="text" class="smalltext menu_slug left" name="menu_name" value="" placeholder="e.g frontend">
-			<pre class="left add-left" style="padding: 4px 8px;">usage: /menubuilder/menus/display/&lt;slug&gt; </pre>
+			<pre class="left add-left" style="padding: 4px 8px;">usage: &lt;?php $this-&gt;Menu-&gt;display('slug'); ?&gt; </pre>
 		</label>
 		
 		<div class="double-top double-bottom cf">
