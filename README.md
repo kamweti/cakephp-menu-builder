@@ -49,7 +49,7 @@ Menubuilder depends on 2 tables 'menu' and 'menu_items',run the following mysql 
 
 -	Tag your menus by a slug which you'll use while displaying
 		
--  	Display the menu anywhere in your views by calling the helper method display and passing the 
+-  	Display the menu anywhere in your views by calling the helper method display and passing a slug 
 
 		<?php $this->Menu->display('yourmenuslug'); ?>
 	
