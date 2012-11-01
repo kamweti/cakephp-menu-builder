@@ -9,7 +9,7 @@
 		echo $this->Html->css('/menubuilder/css/bootstrap.css')
 			.$this->Html->css('/menubuilder/css/style.css');
 	?>
-	
+
 	<link type="text/css" rel="stylesheet" href="styles/style.css" />
 </head>
 <body baseurl='<?php echo $this->base; ?>'>
@@ -34,22 +34,22 @@
 	</div>
 </div>
 <div class="container">
-	
+
 	<div class="row">
 		<?php echo $this->Session->flash(); ?>
 	</div>
 	<?php echo $content_for_layout; ?>
 </div>
 
-<?php echo $this->Html->script('/menubuilder/js/jquery1.7.js'); ?>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <?php echo $this->Html->script('/menubuilder/js/bootstrap-modal.js'); ?>
 <?php echo $this->Html->script('/menubuilder/js/scripts.js'); ?>
 <!-- templates -->
 <script type="text/html" id="menuitem_tmpl">
 	<li>
 		<span class="actions" style="display: none; ">
-			<i class="icon-remove del" title="Remove"></i> 
-			<i class="icon-chevron-up moveup" title="Move Up"></i> 
+			<i class="icon-remove del" title="Remove"></i>
+			<i class="icon-chevron-up moveup" title="Move Up"></i>
 		</span>
 		<a action="<%=action%>" controller="<%=controller%>" href="<%=url%>" target="_blank"><%=label%></a>
 		<ul class="nav nav-list"></ul>
