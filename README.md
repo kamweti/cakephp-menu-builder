@@ -1,7 +1,7 @@
-Menubuilder 0.2
+Menubuilder
 ================
 
-Simple plugin to build and output custom menus in CakePHP
+Dead Simple plugin to buil custom menus in CakePHP
 
 ## Requirements
  CakePHP 1.3
@@ -9,7 +9,7 @@ Simple plugin to build and output custom menus in CakePHP
 
 ## Installation
 
-* Clone the repo to app/plugins in a folder menubuilder
+* Clone the repo to a folder app/plugins/menubuilder
 
 * If you have the ACL plugin installed build the new ACOs else skip this step
 
