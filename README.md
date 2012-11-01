@@ -9,7 +9,9 @@ Dead Simple plugin to buil custom menus in CakePHP
 
 ## Installation
 
-* Clone the repo to a folder app/plugins/menubuilder
+* Clone the repo to a folder app/plugins/
+
+* Rename the folder to 'menubuilder'
 
 * If you have the ACL plugin installed build the new ACOs else skip this step
 
