@@ -21,7 +21,7 @@ Dead Simple plugin to buil custom menus in CakePHP
 
 		var $helpers=array('Menubuilder.Menu');
 
-* Assuming you have an admin prefix set to 'admin', visit <your site address>/admin/menubuilder/menus/ to build new menus
+* Assuming you have an admin prefix set to 'admin', visit <your site address>/menubuilder/menus/ to build new menus
 
 * Tag your menus by a slug which you'll use while displaying
 

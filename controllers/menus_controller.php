@@ -41,7 +41,7 @@ class MenusController extends MenubuilderAppController{
 		$this->set('menus', $menulist);
 	}
 
-	function new(){
+	function add(){
 
 		//fetch all app controllers
 		$appcontrollers=$this->get_all_app_controllers();
