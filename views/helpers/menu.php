@@ -74,8 +74,8 @@ class MenuHelper extends AppHelper{
 
 		foreach($menuitems as $menu){
 
-			$navlists.="<li ".$this->is_current_controller($menu->controller).">";
-			$navlists.="<a href='".$menu->url."'><b ".$this->is_current_action($menu->controller,$menu->action).">".$menu->label."</b></a>";
+			$navlists.='<li '.$this->is_current_controller($menu->controller).'>';
+			$navlists.='<a href="'.$menu->url.'" '. $this->is_current_action($menu->controller,$menu->action) .'><span>'.$menu->label.'</span></a>';
 
 			//if menu element has a children note: $menu->children is stored as a json string
 			if(isset($menu->children) && $menu->children !='' ){

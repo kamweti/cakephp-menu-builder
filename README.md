@@ -1,9 +1,10 @@
 Menubuilder
 ================
 
-Dead Simple plugin to buil custom menus in CakePHP
+Dead Simple Custom Menus in CakePHP
 
 ## Requirements
+
  CakePHP 1.3
 
 
@@ -11,7 +12,7 @@ Dead Simple plugin to buil custom menus in CakePHP
 
 * Clone the repo to a folder app/plugins/
 
-* Rename the folder to 'menubuilder'
+* Rename the plugin folder to 'menubuilder'
 
 * If you have the ACL plugin installed build the new ACOs else skip this step
 
@@ -21,11 +22,11 @@ Dead Simple plugin to buil custom menus in CakePHP
 
 		var $helpers=array('Menubuilder.Menu');
 
-* Assuming you have an admin prefix set to 'admin', visit <your site address>/menubuilder/menus/ to build new menus
+* Assuming you have an admin prefix set to 'admin', visit <your site address>/admin/menubuilder/menus/ to build new menus
 
-* Tag your menus by a slug which you'll use while displaying
+* Tag your menus with a slug. You'll use while displaying
 
-* Display the menu anywhere in your views by calling the helper method display and passing a slug
+* Display your menu anywhere in your views as follows
 
 		<?php $this->Menu->display('yourmenuslug'); ?>
 

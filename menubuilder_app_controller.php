@@ -3,14 +3,13 @@
 	 *
 	 * @author   Muriuki <kamwetimuriuki@gmail.com>
 	 * @license  http://www.opensource.org/licenses/mit-license.php The MIT License
-	 * @link     
+	 * @link
 	 */
 
 	class MenubuilderAppController extends AppController{
 		var $layout='index';
 
 		function beforeFilter(){
-			
+
 		}
 	}
-?>

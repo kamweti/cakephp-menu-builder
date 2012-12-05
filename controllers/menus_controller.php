@@ -395,7 +395,7 @@ class MenusController extends MenubuilderAppController{
 		$slug=strtolower($post['slug']); //slug always in lowercase
 
 		//build menu
-		$this->data['Menu']=array('name'=>$post['name'],'slug'=>$slug);
+		$this->data['Menu'] = array('name'=>$post['name'],'slug'=>$slug);
 
 		if(isset($post['menuid'])){
 			//form in edit state read the menu data
@@ -407,13 +407,27 @@ class MenusController extends MenubuilderAppController{
 		}
 
 
+		//get routing prefixes
+		$routing_prefixes = Configure::read('Routing.prefixes');
+
+
 		//build menu items
 		$menuitems=array();
 		if(!isset($post['menuitems']))  $post['menuitems']=array();
 		foreach($post['menuitems'] as $key=>$menu){
+
+			// match prefix and construct a prefixed url
+			if( $i = strpos( $menu['action'], '_') ) {
+				$prefix = substr($menu['action'], 0, $i );
+				$action = substr( $menu['action'], $i + 1,  strlen($menu['action']) );
+				if( in_array( $prefix, $routing_prefixes ) ) {
+					$menu['url'] = $this->base .'/'. $prefix .'/'. $menu['controller'] .'/'. $action;
+				}
+			}
+
 			$menuitems[$key]=array(
 							'label'=>$menu['label'],
-							'url'=>$menu['url'],
+							'url' => $menu['url'],
 							'controller'=>$menu['controller'],
 							'action'=>$menu['action']
 						);
