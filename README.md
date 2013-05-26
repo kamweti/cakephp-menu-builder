@@ -5,14 +5,12 @@ Dead Simple Custom Menus in CakePHP
 
 ## Requirements
 
- CakePHP 1.3
+ CakePHP 2.2.x
 
 
 ## Installation
 
-* Clone the repo to a folder app/plugins/
-
-* Rename the plugin folder to 'menubuilder'
+* Git clone `git clone git://github.com/kamweti/cakephp-menu-builder.git Menubuilder`
 
 * If you have the ACL plugin installed build the new ACOs else skip this step
 

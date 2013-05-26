@@ -8,7 +8,7 @@
       PRIMARY KEY (`id`)
     );
 
-    CREATE TABLE `menu_items` (
+    CREATE TABLE `menuitems` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       `menu_id` int(11) DEFAULT NULL COMMENT 'id of menu',
       `label` varchar(100) DEFAULT NULL,
