@@ -1,18 +1,24 @@
 Menubuilder
 ================
 
-Dead Simple Custom Menus in CakePHP
+Simple custom menus in cakephp
 
 ## Requirements
 
- CakePHP 2.2.x
+  * PHP 5.3.1 >
+
+  * CakePHP 2.2.x
 
 
 ## Installation
 
 * Clone the repository to your Plugin folder `git clone git://github.com/kamweti/cakephp-menu-builder.git Menubuilder`
 
-* cd to your application directory and generate required menu tables
+* Load the plugin in your `app/Config/bootstrap.php`
+
+    ``CakePlugin::load( 'Menubuilder' );``
+
+* This plugin depends on two tables, use the cake shell to import them
 
   ``$ cake schema create --plugin Menubuilder``
 
@@ -26,8 +32,7 @@ Dead Simple Custom Menus in CakePHP
 
 * Tag your menus with a slug.
 
-* Use the menu slug to dispaly your menu anywhere in your views files
+* Use this slug to display your menu anywhere in your views
 
 		<?php $this->Menu->display('yourmenuslug'); ?>
 
-*	Profit!

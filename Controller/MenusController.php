@@ -24,11 +24,6 @@ class MenusController extends MenubuilderAppController{
 		'Menubuilder.Menuitem',
 	);
 
-	var $menuconfig = array(
-		'defaults' => array(
-			'include_plugin_controllers' => false
-		)
-	);
 
 
 	function beforeFilter(){
@@ -55,30 +50,17 @@ class MenusController extends MenubuilderAppController{
 
 	function add(){
 
-		//fetch all app controllers
-		$appcontrollers=$this->get_all_app_controllers();
-
-		//fetch app controller actions
-		foreach($appcontrollers as $key=>$controller){
-			$controller_class_name = $controller['name'] . 'Controller';
-			$appcontrollers[$key]['actions']=$this->get_controller_actions($controller_class_name);
-		}
-
-
-		if( $this->menuconfig['defaults']['include_plugin_controllers'] ){
-			//fetch all plugin controllers
-
-			$plugincontrollers=$this->get_all_plugins_controllers();
-			//fetch plugin controller actions
-			foreach($plugincontrollers as $key=>$controller){
-				$controller_class_name = $controller['name'] . 'Controller';
-				$plugincontrollers[$key]['actions']=$this->get_plugin_controllers_actions($controller);
+		if ($this->request->is('post')) {
+			$this->Menu->create();
+			if ($this->Menu->save($this->request->data)) {
+				$this->Session->setFlash(__('Your menu has been created, you can now add items'), 'alert/success');
+				$this->redirect(array('action' => 'edit', $this->Menu->id));
+			} else {
+				$this->set('errors', $this->Menu->validationErrors);
+				$this->Session->setFlash(__('The menu could not be saved. Please, try again.'), 'alert/error');
 			}
-			$appcontrollers = array_merge($plugincontrollers,$appcontrollers);  //merge all controllers to one array and return
-
 		}
 
-		$this->set('controllers',$appcontrollers); //return only application controllers
 	}
 
 	/*
@@ -86,44 +68,58 @@ class MenusController extends MenubuilderAppController{
 	 * note: not actual drop of field but setting status to 0,
 	 * @params: menu id
 	 * */
-	function edit( $menuid = null ){
+	function edit( $id = null ){
 
-    if ( is_null($menuid) || is_nan($menuid)) {
-      $this->Session->setFlash ( __ ( 'Invalid menu id', true ), 'messages/error');
-      $this->redirect ( array ('controller' => 'menus', 'action' => 'index', 'plugin' => 'menubuilder' ));
+		if (!$this->Menu->exists($id)) {
+			throw new NotFoundException(__('Invalid menu'));
+		}
+		if ($this->request->is('post') || $this->request->is('put')) {
+			if ($this->Menu->save($this->request->data)) {
+				$this->Session->setFlash(__('The menu has been saved'));
+				$this->redirect(array('action' => 'index'));
+			} else {
+				$this->Session->setFlash(__('The menu could not be saved. Please, try again.'));
+			}
+		} else {
+			$options = array('conditions' => array('Menu.' . $this->Menu->primaryKey => $id));
+			$this->request->data = $this->Menu->find('first', $options);
+		}
+    //fetch all app controllers
+    $appcontrollers=$this->get_all_app_controllers();
+
+    //fetch app controller actions
+    foreach($appcontrollers as $key=>$controller){
+      $controller_class_name = $controller['name'] . 'Controller';
+      $appcontrollers[$key]['actions']=$this->get_controller_actions($controller_class_name);
     }
 
-		//fetch the menu contains: menu, Menuitems
-		$menu = $this->Menu->find(
-			'first',
-			array(
-				'conditions'	=> array(
-					'Menu.id' => $menuid
+    //fetch all plugin controllers
+    $plugincontrollers=$this->get_all_plugins_controllers();
+    //fetch plugin controller actions
+    foreach($plugincontrollers as $key=>$controller){
+      $controller_class_name = $controller['name'] . 'Controller';
+
+      // we have no business showing controllers
+      // with no actions, beats the purpose
+      $actions = $this->get_plugin_controllers_actions($controller);
+      if( empty( $actions ) )  {
+        unset($plugincontrollers[$key]);
+      } else {
+        $plugincontrollers[$key]['actions'] = $actions;
+      }
+    }
+    $this->set('plugin_controllers', $plugincontrollers );
+    $this->set('app_controllers',$appcontrollers); //return only application controllers
+
+		$this->Menuitem->recursive = -1;
+		$menu_tree = $this->Menuitem->createMenuTree(
+			$this->Menuitem->find('all', array(
+					'conditions' => array( 'menu_id' => $id )
 				)
 			)
 		);
-
-		$this->set('menu',$menu);
-
-		//fetch all app controllers
-		$appcontrollers=$this->get_all_app_controllers();
-		foreach($appcontrollers as $key=>$controller){
-			$controller_class_name = $controller['name'] . 'Controller';
-			$appcontrollers[$key]['actions']=$this->get_controller_actions($controller_class_name);
-		}
-
-		if( $this->menuconfig['defaults']['include_plugin_controllers'] ){
-			//fetch all plugin controllers
-			$plugincontrollers=$this->get_all_plugins_controllers();
-			foreach($plugincontrollers as $key=>$controller){
-				$controller_class_name = $controller['name'] . 'Controller';
-				$plugincontrollers[$key]['actions']=$this->get_plugin_controllers_actions($controller);
-			}
-			$appcontrollers = array_merge($plugincontrollers,$appcontrollers);
-		}
-
-		$this->set('controllers',$appcontrollers);
-
+		$this->set('menu_ul_list', $this->Menuitem->make_ul_list($menu_tree) );
+		$this->set('menu_options_list', $this->Menuitem->make_options_list($menu_tree) );
 	}
 
 
@@ -142,9 +138,9 @@ class MenusController extends MenubuilderAppController{
 		}
 		$this->request->onlyAllow('post', 'delete');
 		if ($this->Menu->delete()) {
-			$this->Session->setFlash(__('Menu deleted'), 'messages/success' );
+			$this->Session->setFlash(__('Menu deleted'), 'alert/success' );
 		} else {
-			$this->Session->setFlash(__('Menu was not deleted'), 'messages/error');
+			$this->Session->setFlash(__('Menu was not deleted'), 'alert/error');
 		}
 
 		$this->redirect(array('action' => 'index'));
@@ -163,7 +159,7 @@ class MenusController extends MenubuilderAppController{
 
 
 	/*
-	 * fetch all controllers in /app/controllers
+	 * fetch all controllers in /app/Controller
 	 * @params:
 	 * */
 	function get_all_app_controllers(){
@@ -198,7 +194,8 @@ class MenusController extends MenubuilderAppController{
 	}
 
 	/*
-	 * fetch all controllers in /app/plugins
+	 * fetch all controllers in /app/Plugin
+	 * note: this will fetch controllers for plugins that have been enabled
 	 * @params:
 	 * */
 	function get_all_plugins_controllers($filter_default_controller = true){
@@ -208,36 +205,30 @@ class MenusController extends MenubuilderAppController{
 		$folder =new Folder();
 
 		// Loop through the plugins
-		foreach($plugin_paths as $plugin_path)
-		{
-			$didCD = $folder->cd($plugin_path . DS . 'controllers');
+		foreach($plugin_paths as $plugin_path) {
+			$didCD = $folder->cd($plugin_path . DS . 'Controller');
 
-			if(!empty($didCD))
-			{
-				$files = $folder->findRecursive('.*_controller\.php');
+			if(!empty($didCD)) {
+				$files = $folder->findRecursive('.*Controller\.php');
 
 				$plugin_name = substr($plugin_path, strrpos($plugin_path, DS) + 1);
 
-				foreach($files as $fileName)
-				{
+
+				foreach($files as $fileName) {
 					$file = basename($fileName);
 
 					// Get the controller name
-					$controller_class_name = Inflector::camelize(substr($file, 0, strlen($file) - strlen('_controller.php')));
+					$controller_class_name = Inflector::camelize(substr($file, 0, strlen($file) - strlen('Controller.php')));
 
-					if(!$filter_default_controller || Inflector::humanize($plugin_name) != $controller_class_name)
-					{
-    					if (!preg_match('/^'. Inflector::humanize($plugin_name) . 'App/', $controller_class_name))
-    					{
-    						if (!App::import('Controller', $plugin_name . '.' . $controller_class_name))
-    						{
-    							debug('Error importing ' . $controller_class_name . ' for plugin ' . $plugin_name);
-    						}
-    						else
-    						{
-    						    $plugins_controllers[] = array('file' => $fileName, 'name' => Inflector::humanize($plugin_name) . "/" . $controller_class_name);
-    						}
-    					}
+					// if this is a default controller
+					if ( preg_match('/^'. Inflector::humanize($plugin_name) . 'App/', $controller_class_name) ) {
+						if( $filter_default_controller ) continue;
+					} else {
+						// only add it to menu list if the import is successful,
+						// meaning the plugin has been loaded in app/Config/bootstrap.php
+						if ( App::import('Controller', $plugin_name . '.' . $controller_class_name)) {
+							$plugins_controllers[] = array('file' => $fileName, 'name' => Inflector::humanize($plugin_name) . "/" . $controller_class_name);
+						}
 					}
 				}
 			}
@@ -254,15 +245,17 @@ class MenusController extends MenubuilderAppController{
 
 		$folder =& new Folder();
 
-		$folder->cd(APP . 'plugins');
+		$folder->cd(APP . 'Plugin');
 		$app_plugins = $folder->read();
+
 		foreach($app_plugins[0] as $plugin_name)
 		{
-			$plugin_names[] = APP . 'plugins' . DS . $plugin_name;
+			$plugin_names[] = APP . 'Plugin' . DS . $plugin_name;
 		}
 
-		$folder->cd(ROOT . DS . 'plugins');
+		$folder->cd(ROOT . DS . 'plugins'); // root folder plugin directory name is `plugins`
 		$root_plugins = $folder->read();
+
 		foreach($root_plugins[0] as $plugin_name)
 		{
 			$plugin_names[] = ROOT . DS . 'plugins' . DS . $plugin_name;
@@ -278,14 +271,14 @@ class MenusController extends MenubuilderAppController{
 
 		$folder =& new Folder();
 
-		$folder->cd(APP . 'plugins');
+		$folder->cd(APP . 'Plugin');
 		$app_plugins = $folder->read();
 		if(!empty($app_plugins))
 		{
 			$plugin_names = array_merge($plugin_names, $app_plugins[0]);
 		}
 
-		$folder->cd(ROOT . DS . 'plugins');
+		$folder->cd(ROOT . DS . 'Plugin');
 		$root_plugins = $folder->read();
 		if(!empty($root_plugins))
 		{
@@ -417,72 +410,70 @@ class MenusController extends MenubuilderAppController{
 	 * return success or error
 	 * */
 	function ajax_save(){
-		$data = array();
+		$this->render(false, false);
 
-		$slug = strtolower($this->request->data['slug']); //slug always in lowercase
+		if( $this->request->isPost() ) {
+			if( $this->Menu->exists($this->request->data['id']) ) {
+				//save the menu name
+				$menu = $this->Menu->read(null, $this->request->data['id']);
+				$this->Menu->save(
+					array(
+						'name' =>  $this->request->data['name']
+					)
+				);
+				//save the menu items
+				$get_items = function( $items, $menu_id, $parent_id = '', $nested = false) use (&$get_items) {
+					$_items = array();
 
-		//build menu
-		$data['Menu'] = array(
-			'name' => $this->request->data['name'],
-			'slug' => $slug
-		);
+					foreach( $items as $item ) {
+						$_items[] = array(
+							'id' 				=> isset($item['id']) ? $item['id'] : false ,
+							'menu_id' 	=> $menu_id,
+							'label' 		=> $item['label'],
+							'url' 		  => $item['url'],
+							'parent_id' => (int) $parent_id,
+							'nested' 		=> (int) $nested
+						);
+						if( array_key_exists('children', $item) ) {
+							$_items = array_merge($_items, $get_items($item['children'], $menu_id, $item['id'], true));
+						}
+					}
+					return $_items;
+				};
 
-		if(isset($this->request->data['menuid'])){
-			//form in edit state read the menu data
-			$this->Menu->read(null,$this->request->data['menuid']);
-			$data['Menu']['id'] = $this->request->data['menuid'];
+	      //clear previous menu items before insert
+	      $this->Menuitem->recursive = -1;
+	      if( $this->Menuitem->deleteAll(
+	      	array(
+	        	"menu_id" => $this->Menu->id
+	        ),
+	        false //do not cascade
+	      ) ) {
+	      	$this->Menuitem->saveAll(
+	      		$get_items($this->request->data['items'], $this->Menu->id )
+	      	);
 
-			//clear previous menu items before insert
-			$this->Menuitem->deleteAll(array(
-				"Menuitem.menu_id" => $this->request->data['menuid']
-				),
-				false
-			); //do not cascade
+				  $this->Menuitem->recursive = -1;
+					$menu_tree = $this->Menuitem->createMenuTree(
+						$this->Menuitem->find('all', array(
+								'conditions' => array( 'menu_id' => $this->Menu->id )
+							)
+						)
+					);
 
-		}
+					echo json_encode(
+						array(
+							'menu_name' => $menu['Menu']['name'],
+							'menu_ul_list' => $this->Menuitem->make_ul_list($menu_tree),
+							'menu_options_list' => $this->Menuitem->make_options_list($menu_tree)
+						)
+					);
+
+	      }
 
 
-		//get routing prefixes
-		$routing_prefixes = Configure::read('Routing.prefixes');
-
-		//build menu items
-		$Menuitems=array();
-
-		if(!isset($this->request->data['menuitems']))  $this->request->data['menuitems'] = array();
-
-		foreach( $this->request->data['menuitems'] as $key=>$menu){
-			// match prefix and construct a prefixed url
-			if( $i = strpos( $menu['action'], '_') ) {
-				$prefix = substr($menu['action'], 0, $i );
-				$action = substr( $menu['action'], $i + 1,  strlen($menu['action']) );
-				if( in_array( $prefix, $routing_prefixes ) ) {
-					$menu['url'] = $this->base .'/'. $prefix .'/'. $menu['controller'] .'/'. $action;
-				}
 			}
-
-			$Menuitems[$key]=array(
-				'label'=>$menu['label'],
-				'url' => $menu['url'],
-				'controller'=>$menu['controller'],
-				'action'=>$menu['action']
-			);
-
-			//children
-			if(isset($menu['children'])){
-				$Menuitems[$key]['children']=json_encode($menu['children']);
-			}
 		}
-
-		$data['Menuitem'] = $Menuitems;
-
-		//do insert
-		if( $this->Menu->saveAll($data, array('validate' => false)) ) {
-			echo 'success';
-			exit;
-		} else {
-			//debug($this->validationErrors); die();
-		}
-
 
 	}
 

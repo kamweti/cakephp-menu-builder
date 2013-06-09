@@ -4,55 +4,53 @@
 	<meta charset="utf-8" >
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<title>Menu Builder</title>
-	<link rel="shortcut icon" href="images/favicon.ico">
 	<?php
-		echo $this->Html->css('/menubuilder/css/bootstrap.css')
-			.$this->Html->css('/menubuilder/css/style.css');
+		echo $this->Html->css('/menubuilder/css/bootstrap.min.css');
+		echo $this->Html->css('/menubuilder/css/style.css');
 	?>
-
-	<link type="text/css" rel="stylesheet" href="styles/style.css" />
 </head>
 <body>
 <div class="modal" id="myModal"></div>
 <div class="navbar navbar-fixed-top">
-	<div class="navbar-inner">
-		<div class="container">
-			<a class="brand " href="<?php echo $this->Html->url(array("plugin"=>"menubuilder","controller" => "menus", "action" => "index"));?>">MenuBuilder</a>
-			<div class="nav-collapse">
-				<ul class="nav">
-					<li>
-						<a href="<?php echo $this->Html->url(array("plugin"=>"menubuilder","controller" => "menus", "action" => "index"));?>">
-							All menus
-						</a>
-					</li>
-					<li>
-						<a href="<?php echo $this->Html->url(array("plugin"=>"menubuilder","controller" => "menus", "action" => "add"));?>">Add New Menu</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="brand" href="<?php echo $this->Html->url(array('plugin'=>'menubuilder','controller' => 'menus', 'action' => 'index')); ?>">MenuBuilder</a>
+      <div class="nav-collapse">
+        <ul class="nav">
+          <li>
+            <a href="<?php echo $this->Html->url(array('plugin'=>'menubuilder', 'controller'=>'menus', 'action'=>'index')) ?>">
+              All menus
+            </a>
+          </li>
+          <li>
+            <a href="<?php echo $this->Html->url(array('plugin'=>'menubuilder', 'controller'=>'menus', 'action'=>'add')) ?>">
+              Add New Menu
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="container">
-
 	<div class="row">
 		<?php echo $this->Session->flash(); ?>
 	</div>
 	<?php echo $content_for_layout; ?>
 </div>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <?php echo $this->Html->script('/menubuilder/js/bootstrap-modal.js'); ?>
+<?php echo $this->Html->script('/menubuilder/js/bootstrap-tab.js'); ?>
 <?php echo $this->Html->script('/menubuilder/js/scripts.js'); ?>
 <!-- templates -->
 <script type="text/html" id="menuitem_tmpl">
-	<li>
-		<span class="actions" style="display: none; ">
-			<i class="icon-remove del" title="Remove"></i>
+	<li data-label="<%=label%>" data-url="<%=href%>">
+		<span class="actions">
+      <i class="icon-remove del" title="Remove"></i>
 			<i class="icon-chevron-up moveup" title="Move Up"></i>
 		</span>
-		<a action="<%=action%>" controller="<%=controller%>" href="<%=url%>" target="_blank"><%=label%></a>
-		<ul class="nav nav-list"></ul>
+		<span><%=label%></span>
 	</li>
 </script>
 <script type="text/html" id="menu_child_item_tmpl">
