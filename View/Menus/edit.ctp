@@ -1,7 +1,7 @@
 
 <div class="row">
 	<div class="span5">
-		<h1>Edit menu</h1>
+		<h1><?php echo __("Edit menu"); ?></h1>
 	</div>
 </div>
 
@@ -9,49 +9,50 @@
 	<div class="span12 add-top">
   	<input type="hidden" class="menu_id" value="<?php echo $this->request->data['Menu']['id'] ?>" />
     <div class="well cf">
-    	<h4>Menu name</h4>
+    	<h4><?php echo __("Menu name"); ?></h4>
       <label class="left">
         <input type="text" class="smalltext menu_name" name="menu_name" value="<?php echo $this->request->data['Menu']['name']; ?>" />
       </label>
-      <pre style="float:right;margin-top: -5px;"> Use it in your view:  &lt;?php $this-&gt;Menu-&gt;display('<?php echo $this->request->data['Menu']['slug'] ?>'); ?&gt;</pre>
+      <pre style="float:right;margin-top: -5px;"> <?php echo __("Use it in your view"); ?>: &lt;?php $this-&gt;Menu-&gt;display('<?php echo $this->request->data['Menu']['slug'] ?>'); ?&gt;</pre>
     </div>
     <form method="post" action="" class="well edit_menu cf">
       <div class="left">
-        <h4>Add items to this menu</h4>
+        <h4><?php echo __("Add items to this menu"); ?></h4>
         <label class="add-top cf control-group">
-          <h5>Label</h5>
-          <input type="text" name="menu_label" class="menu_label" placeholder="e.g Products" />
+          <h5><?php echo __("Label"); ?></h5>
+          <input type="text" name="menu_label" class="menu_label" placeholder="e.g <?php echo __("Products"); ?>" />
         </label>
-        <h5>Specify where this menu item points to</h5>
+        <h5><?php echo __("Specify where this menu item points to"); ?></h5>
         <ul class="nav nav-pills menu_points_to_tabs">
           <li class="active">
-            <a href="#controller_action">Controller Action</a>
+            <a href="#controller_action"><?php echo __("Controller Action"); ?></a>
           </li>
           <li>
-            <a href="#plugin_action">Plugin Action</a>
+            <a href="#plugin_action"><?php echo __("Plugin Action"); ?></a>
           </li>
           <li>
-            <a href="#custom_url">Custom URL</a>
+            <a href="#custom_url"><?php echo __("Custom URL"); ?></a>
           </li>
         </ul>
+
         <div class="tab-content">
           <div class="tab-pane active" id="controller_action">
             <label>
-              <span class="block">Controller</span>
+              <span class="block"><?php echo __("Controller"); ?></span>
               <select class="select_controller">
                 <?php foreach($app_controllers as $controller): ?>
-                  <option actions='<?php echo json_encode($controller['actions']); ?>'><?php echo $controller['name']; ?></option>
+                <option actions='<?php echo json_encode($controller['actions']); ?>'><?php echo $controller['name']; ?></option>
                 <?php endforeach; ?>
               </select>
             </label>
             <label class="select_action">
-              <span class="block">Action</span>
+              <span class="block"><?php echo __("Action"); ?></span>
               <select><!-- will be populated with actions on change --></select>
             </label>
           </div>
           <div class="tab-pane" id="plugin_action">
             <label>
-              <span class="block">Plugin Controller</span>
+              <span class="block"><?php echo __("Plugin Controller"); ?></span>
               <select class="select_controller">
                 <?php foreach($plugin_controllers as $controller): ?>
                   <option actions='<?php echo json_encode($controller['actions']); ?>'><?php echo $controller['name']; ?></option>
@@ -59,7 +60,7 @@
               </select>
             </label>
             <label class="select_action">
-              <span class="block">Plugin Action</span>
+              <span class="block"><?php echo __("Plugin Action"); ?></span>
               <select><!-- will be populated with actions on change --></select>
             </label>
           </div>
@@ -69,14 +70,14 @@
             </label>
           </div>
         </div>
-        <h5>Does this menu item have a parent?</h5>
+        <h5><?php echo __("Does this menu item have a parent?"); ?></h5>
         <label class="radio">
-          <input type="radio" name="has_parent" value="no" class="has_parent" checked/> No
+          <input type="radio" name="has_parent" value="no" class="has_parent" checked/> <?php echo __("No"); ?>
         </label>
         <label class="radio">
-          <input type="radio" name="has_parent" value="yes" class="has_parent" /> Yes
+          <input type="radio" name="has_parent" value="yes" class="has_parent" /> <?php echo __("Yes"); ?>
           <div style="display:none;" class="specify_parent_container">
-            <span>Specify</span>
+            <span><?php echo __("Specify"); ?></span>
             <select class="the_parent"><?php echo $menu_options_list; ?></select>
           </div>
         </label>
@@ -85,7 +86,7 @@
         </label>
       </div>
       <div class="double-left left">
-        <h4 class="block add-bottom">Preview</h4>
+        <h4 class="block add-bottom"><?php echo __("Preview"); ?></h4>
         <div class="menulistprvw">
 					<?php echo $menu_ul_list; ?>
         </div>
@@ -93,4 +94,3 @@
     </form>
 	</div>
 </div>
-
