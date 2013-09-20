@@ -7,5 +7,5 @@
  */
 
 class MenubuilderAppController extends AppController{
-	var $layout='index';
+	public $layout = 'index';
 }

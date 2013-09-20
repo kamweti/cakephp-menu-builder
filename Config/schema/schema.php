@@ -32,5 +32,4 @@ class MenubuilderSchema extends CakeSchema {
 			),
 		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'InnoDB')
 	);
-
 }

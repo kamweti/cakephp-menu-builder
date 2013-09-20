@@ -12,24 +12,24 @@ App::uses('Sanitize', 'Utility');
 
 class MenusController extends MenubuilderAppController{
 
-	var $components = array(
+	public $components = array(
 		'Acl',
 		'Auth',
 		'Session'
 	);
 
-	var $uses = array(
+	public $uses = array(
 		'Menubuilder.Menu',
 		'Menubuilder.Menuitem',
 	);
 
-	function beforeFilter(){
+	public function beforeFilter(){
 	  parent :: beforeFilter();
 
 		$this->Auth->allow();
 	}
 
-	function index(){
+	public function index(){
 		// fetch all menus,contains menu and Menuitem models
 		$allmenus = $this->Menu->find('all', array('order'=>'Menu.id desc'));
 
@@ -44,8 +44,7 @@ class MenusController extends MenubuilderAppController{
 		$this->set('menus', $menulist);
 	}
 
-	function add(){
-
+	public function add(){
 		if ($this->request->is('post')) {
 			$this->Menu->create();
 			if ($this->Menu->save($this->request->data)) {
@@ -64,7 +63,7 @@ class MenusController extends MenubuilderAppController{
 	 * note: not actual drop of field but setting status to 0,
 	 * @params: menu id
 	 * */
-	function edit( $id = null ){
+	public function edit( $id = null ){
 
 		if (!$this->Menu->exists($id)) {
 			throw new NotFoundException(__('Invalid menu'));
@@ -146,14 +145,14 @@ class MenusController extends MenubuilderAppController{
 	 * shows a preview of the menu,
 	 * @params: id the menu id
 	 * */
-	function preview( $menuid=null ){
+	public function preview( $menuid=null ){
 	}
 
 	/*
 	 * fetch all controllers in /app/Controller
 	 * @params:
 	 * */
-	function get_all_app_controllers(){
+	public function get_all_app_controllers(){
 		$controllers = array();
 		$folder      = & new Folder();
 
@@ -185,7 +184,7 @@ class MenusController extends MenubuilderAppController{
 	 * note: this will fetch controllers for plugins that have been enabled
 	 * @params:
 	 * */
-	function get_all_plugins_controllers($filter_default_controller = true){
+	public function get_all_plugins_controllers($filter_default_controller = true){
 		$plugin_paths = $this->get_all_plugins_paths();
 
 		$plugins_controllers = array();
@@ -305,7 +304,7 @@ class MenusController extends MenubuilderAppController{
 		}
 	}
 
-	function get_plugin_controllers_actions($plugin_controller,$filter_default_controller = true) {
+	public function get_plugin_controllers_actions($plugin_controller,$filter_default_controller = true) {
 		$plugin_controllers_actions = array();
 
 		$plugin_name     = $this->getPluginName($plugin_controller['name']);
@@ -326,7 +325,7 @@ class MenusController extends MenubuilderAppController{
 		return $plugin_controllers_actions;
 	}
 
-	function get_controller_classname($controller_name){
+	public function get_controller_classname($controller_name){
 
     if(strrpos($controller_name, 'Controller') !== strlen($controller_name) - strlen('Controller'))
     {
@@ -348,7 +347,7 @@ class MenusController extends MenubuilderAppController{
     }
 	}
 
-	function getPluginName($ctrlName = null) {
+	public function getPluginName($ctrlName = null) {
 		$arr = String::tokenize($ctrlName, '/');
 		if (count($arr) == 2) {
 			return $arr[0];
@@ -357,7 +356,7 @@ class MenusController extends MenubuilderAppController{
 		}
 	}
 
-	function getPluginControllerName($ctrlName = null) {
+	public function getPluginControllerName($ctrlName = null) {
 		$arr = String::tokenize($ctrlName, '/');
 		if (count($arr) == 2) {
 			return $arr[1];
@@ -371,7 +370,7 @@ class MenusController extends MenubuilderAppController{
 	 * save menu,triggered via ajax
 	 * return success or error
 	 * */
-	function ajax_save(){
+	public function ajax_save(){
 		$this->render(false, false);
 
 		if( $this->request->isPost() ) {

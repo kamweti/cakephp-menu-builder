@@ -1,4 +1,3 @@
-
 <div class="row">
 	<div class="span5">
 		<h1><?php echo __("Edit menu"); ?></h1>
@@ -15,6 +14,7 @@
       </label>
       <pre style="float:right;margin-top: -5px;"> <?php echo __("Use it in your view"); ?>: &lt;?php $this-&gt;Menu-&gt;display('<?php echo $this->request->data['Menu']['slug'] ?>'); ?&gt;</pre>
     </div>
+
     <form method="post" action="" class="well edit_menu cf">
       <div class="left">
         <h4><?php echo __("Add items to this menu"); ?></h4>
@@ -22,6 +22,7 @@
           <h5><?php echo __("Label"); ?></h5>
           <input type="text" name="menu_label" class="menu_label" placeholder="e.g <?php echo __("Products"); ?>" />
         </label>
+
         <h5><?php echo __("Specify where this menu item points to"); ?></h5>
         <ul class="nav nav-pills menu_points_to_tabs">
           <li class="active">
@@ -70,10 +71,12 @@
             </label>
           </div>
         </div>
+
         <h5><?php echo __("Does this menu item have a parent?"); ?></h5>
         <label class="radio">
           <input type="radio" name="has_parent" value="no" class="has_parent" checked/> <?php echo __("No"); ?>
         </label>
+
         <label class="radio">
           <input type="radio" name="has_parent" value="yes" class="has_parent" /> <?php echo __("Yes"); ?>
           <div style="display:none;" class="specify_parent_container">
@@ -81,6 +84,7 @@
             <select class="the_parent"><?php echo $menu_options_list; ?></select>
           </div>
         </label>
+        
         <label>
           <input type="button" value="Add to menu &rarr;" class="add_menu_item add-top btn cf" />
         </label>

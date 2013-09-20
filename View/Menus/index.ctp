@@ -67,5 +67,6 @@
 			</tbody>
 		</table>
 		<?php endif; ?>
+		
 	</div>
 </div>

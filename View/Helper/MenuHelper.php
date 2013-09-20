@@ -5,10 +5,10 @@ App::uses('AppHelper', 'View/Helper');
 
 class MenuHelper extends AppHelper{
 
-	var $Menu;
-	var $Acl;
+	public $Menu;
+	public $Acl;
 
-	var $helpers = array(
+	public $helpers = array(
 		'Html',
 		'Session'
 	);
@@ -24,7 +24,7 @@ class MenuHelper extends AppHelper{
 	 *
 	 * @params $slug lowercase menu slug
 	 **/
-	function display( $slug = null, $options = array() ){
+	public function display( $slug = null, $options = array() ){
 		if ($slug == null) {
 			return '';
 		}
@@ -46,7 +46,7 @@ class MenuHelper extends AppHelper{
 	 *
 	 * @params $slug lowercase menu slug
 	 **/
-	function get($slug = null){
+	public function get($slug = null){
 		if ($slug == null) {
 			return '';
 		}
@@ -70,6 +70,42 @@ class MenuHelper extends AppHelper{
 		}
 	}
 
+
+	/**
+	 * Is Current Controller
+	 *
+	 * @params $urlcontroller
+	 * checks if controller for the current link matches current controller,
+	 * then add class current to highlight it
+	 */
+	public function is_current_controller($urlcontroller=""){
+		$urlcontroller = strtolower($urlcontroller);
+
+		if( $this->request->params['controller'] == $urlcontroller ){
+			return "class='current'";
+		} else {
+			return "";
+		}
+	}
+
+
+	/**
+	 * Is Current Action
+	 *
+	 * @params $urlcontroller
+	 * checks if controller for the current link matches current controller,
+	 * then add class current to highlight it
+	 */
+	public function is_current_action($urlcontroller="",$urlaction=""){
+		$urlcontroller = strtolower($urlcontroller);
+		$urlaction = strtolower($urlaction);
+		if( $this->request->params['controller'] == $urlcontroller && $this->request->params['action']==$urlaction ) {
+			return "class='active'";
+		} else {
+			return "";
+		}
+	}
+	
 
 	/**
 	 * Make Navigation list elements
@@ -101,42 +137,5 @@ class MenuHelper extends AppHelper{
 		$navlists .= '</ul>';
 
 		return $navlists;
-	}
-
-
-
-	/**
-	 * Is Current Controller
-	 *
-	 * @params $urlcontroller
-	 * checks if controller for the current link matches current controller,
-	 * then add class current to highlight it
-	 */
-	function is_current_controller($urlcontroller=""){
-		$urlcontroller = strtolower($urlcontroller);
-
-		if( $this->request->params['controller'] == $urlcontroller ){
-			return "class='current'";
-		} else {
-			return "";
-		}
-	}
-
-
-	/**
-	 * Is Current Action
-	 *
-	 * @params $urlcontroller
-	 * checks if controller for the current link matches current controller,
-	 * then add class current to highlight it
-	 */
-	function is_current_action($urlcontroller="",$urlaction=""){
-		$urlcontroller = strtolower($urlcontroller);
-		$urlaction = strtolower($urlaction);
-		if( $this->request->params['controller'] == $urlcontroller && $this->request->params['action']==$urlaction ) {
-			return "class='active'";
-		} else {
-			return "";
-		}
 	}
 }

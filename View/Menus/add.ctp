@@ -26,7 +26,7 @@
 				</pre>
 			</label>
 
-			<input type="submit" class="btn btn-success" value="<?php echo __("Create"); ?> />
+			<input type="submit" class="btn btn-success" value="<?php echo __("Create"); ?>" />
 		</div>
 	</form>
 </div>
