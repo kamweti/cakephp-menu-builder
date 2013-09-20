@@ -3,9 +3,7 @@
 class Menuitem extends MenubuilderAppModel{
 
   public $hasMany = array('Menubuilder.Menu');
-
-
-
+  
   /**
    * Creates a menu tree
    * @param  array $menu_items
@@ -14,15 +12,14 @@ class Menuitem extends MenubuilderAppModel{
   public function createMenuTree($menu_items, $parentid = null){
 
     $menu_structure = array();
-    foreach($menu_items as $item) {
+    foreach ( $menu_items as $item ) {
       if( $item['Menuitem']['nested'] == 0 && is_null($parentid) ) {
         //find children for this menu
         $kids = $this->createMenuTree($menu_items, $item['Menuitem']['id']);
         if( ! empty($kids) ) $item['Menuitem']['children'] = $kids ;
 
         $menu_structure[] = $item['Menuitem'];
-      } else{
-
+      } else {
         // this is a child,
         if( $item['Menuitem']['parent_id'] == $parentid ) {
           //does the child have nested children
@@ -32,7 +29,6 @@ class Menuitem extends MenubuilderAppModel{
 
           $menu_structure[] = $item['Menuitem'];
         }
-
       }
     }
 
@@ -84,7 +80,4 @@ class Menuitem extends MenubuilderAppModel{
     }
     return $optionlist;
   }
-
-
 }
-?>
