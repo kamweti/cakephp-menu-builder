@@ -9,6 +9,4 @@
 App::uses('AppModel', 'Model');
 
 class MenubuilderAppModel extends AppModel{
-
-
 }

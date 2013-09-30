@@ -1,5 +1,5 @@
 Menubuilder
-================
+===========
 
 Simple custom menus in cakephp
 
@@ -35,4 +35,3 @@ Simple custom menus in cakephp
 * Use this slug to display your menu anywhere in your views
 
 		<?php $this->Menu->display('yourmenuslug'); ?>
-

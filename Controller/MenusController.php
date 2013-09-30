@@ -6,50 +6,45 @@
  * @link
  */
 
-
-App::import('Config','Menubuilder.MenuSettings');
-App::uses('Folder', 'Utility');
+App::import('Config', 'Menubuilder.MenuSettings');
+App::uses('Folder',   'Utility');
 App::uses('Sanitize', 'Utility');
 
 class MenusController extends MenubuilderAppController{
 
-	var $components = array(
+	public $components = array(
 		'Acl',
 		'Auth',
 		'Session'
 	);
 
-	var $uses = array(
+	public $uses = array(
 		'Menubuilder.Menu',
 		'Menubuilder.Menuitem',
 	);
 
-
-
-	function beforeFilter(){
+	public function beforeFilter(){
 	  parent :: beforeFilter();
+
 		$this->Auth->allow();
 	}
 
+	public function index(){
+		// fetch all menus,contains menu and Menuitem models
+		$allmenus = $this->Menu->find('all', array('order'=>'Menu.id desc'));
 
-	function index(){
-
-		//fetch all menus,contains menu and Menuitem models
-		$allmenus=$this->Menu->find('all', array('order'=>'Menu.id desc'));
-
-		$menulist=array(); //array to return containing menu id,name
+		$menulist = array(); //array to return containing menu id,name
 
 		foreach($allmenus as $key=>$menu){
-			$menulist[$key]['id']=$menu['Menu']['id']; //menu id
-			$menulist[$key]['name']=$menu['Menu']['name']; //menu name
-			$menulist[$key]['slug']=$menu['Menu']['slug']; //menu name
+			$menulist[$key]['id']   = $menu['Menu']['id']; //menu id
+			$menulist[$key]['name'] = $menu['Menu']['name']; //menu name
+			$menulist[$key]['slug'] = $menu['Menu']['slug']; //menu name
 		}
 
 		$this->set('menus', $menulist);
 	}
 
-	function add(){
-
+	public function add(){
 		if ($this->request->is('post')) {
 			$this->Menu->create();
 			if ($this->Menu->save($this->request->data)) {
@@ -68,7 +63,7 @@ class MenusController extends MenubuilderAppController{
 	 * note: not actual drop of field but setting status to 0,
 	 * @params: menu id
 	 * */
-	function edit( $id = null ){
+	public function edit( $id = null ){
 
 		if (!$this->Menu->exists($id)) {
 			throw new NotFoundException(__('Invalid menu'));
@@ -123,14 +118,14 @@ class MenusController extends MenubuilderAppController{
 	}
 
 
-/**
- * delete method
- *
- * @throws NotFoundException
- * @throws MethodNotAllowedException
- * @param string $id
- * @return void
- */
+	/**
+	 * delete method
+	 *
+	 * @throws NotFoundException
+	 * @throws MethodNotAllowedException
+	 * @param string $id
+	 * @return void
+	 */
 	public function delete($id = null) {
 		$this->Menu->id = $id;
 		if (!$this->Menu->exists()) {
@@ -150,41 +145,32 @@ class MenusController extends MenubuilderAppController{
 	 * shows a preview of the menu,
 	 * @params: id the menu id
 	 * */
-	function preview($menuid=null){
-
-
+	public function preview( $menuid=null ){
 	}
-
-
-
 
 	/*
 	 * fetch all controllers in /app/Controller
 	 * @params:
 	 * */
-	function get_all_app_controllers(){
+	public function get_all_app_controllers(){
 		$controllers = array();
-		$folder = & new Folder();
+		$folder      = & new Folder();
 
 		$didCD = $folder->cd(APP . 'Controller');
 
 		if(!empty($didCD)){
-		    $files = $folder->findRecursive('.*Controller\.php');
+	    $files = $folder->findRecursive('.*Controller\.php');
 
-		    foreach($files as $fileName)
-			{
+	    foreach($files as $fileName) {
 				$file = basename($fileName);
 
 				// Get the controller name
 				$controller_class_name =substr($file, 0, strlen($file) - strlen('Controller.php'));
 
-				if (!App::import('Controller', $controller_class_name))
-				{
+				if (!App::import('Controller', $controller_class_name)) {
 					debug('Error importing ' . $controller_class_name . ' from APP controllers');
-				}
-				else
-				{
-				    $controllers[] = array('file' => $fileName, 'name' => $controller_class_name);
+				} else {
+				   $controllers[] = array('file' => $fileName, 'name' => $controller_class_name);
 				}
 			}
 		}
@@ -198,11 +184,11 @@ class MenusController extends MenubuilderAppController{
 	 * note: this will fetch controllers for plugins that have been enabled
 	 * @params:
 	 * */
-	function get_all_plugins_controllers($filter_default_controller = true){
+	public function get_all_plugins_controllers($filter_default_controller = true){
 		$plugin_paths = $this->get_all_plugins_paths();
 
 		$plugins_controllers = array();
-		$folder =new Folder();
+		$folder              = new Folder();
 
 		// Loop through the plugins
 		foreach($plugin_paths as $plugin_path) {
@@ -213,7 +199,6 @@ class MenusController extends MenubuilderAppController{
 
 				$plugin_name = substr($plugin_path, strrpos($plugin_path, DS) + 1);
 
-
 				foreach($files as $fileName) {
 					$file = basename($fileName);
 
@@ -222,7 +207,7 @@ class MenusController extends MenubuilderAppController{
 
 					// if this is a default controller
 					if ( preg_match('/^'. Inflector::humanize($plugin_name) . 'App/', $controller_class_name) ) {
-						if( $filter_default_controller ) continue;
+						if( $filter_default_controller ) { continue; }
 					} else {
 						// only add it to menu list if the import is successful,
 						// meaning the plugin has been loaded in app/Config/bootstrap.php
@@ -248,16 +233,14 @@ class MenusController extends MenubuilderAppController{
 		$folder->cd(APP . 'Plugin');
 		$app_plugins = $folder->read();
 
-		foreach($app_plugins[0] as $plugin_name)
-		{
+		foreach($app_plugins[0] as $plugin_name) {
 			$plugin_names[] = APP . 'Plugin' . DS . $plugin_name;
 		}
 
 		$folder->cd(ROOT . DS . 'plugins'); // root folder plugin directory name is `plugins`
 		$root_plugins = $folder->read();
 
-		foreach($root_plugins[0] as $plugin_name)
-		{
+		foreach($root_plugins[0] as $plugin_name) {
 			$plugin_names[] = ROOT . DS . 'plugins' . DS . $plugin_name;
 		}
 
@@ -265,8 +248,7 @@ class MenusController extends MenubuilderAppController{
 	}
 
 
-	public function get_all_plugins_names()
-	{
+	public function get_all_plugins_names() {
 		$plugin_names = array();
 
 		$folder =& new Folder();
@@ -296,55 +278,44 @@ class MenusController extends MenubuilderAppController{
 	 * @param string $controller_class_name (eg: 'AcosController')
 	 * @param boolean $filter_base_methods
 	 */
-	public function get_controller_actions($controller_classname, $filter_base_methods = true)
-	{
-	    $controller_classname = $this->get_controller_classname($controller_classname);
-		$methods = get_class_methods($controller_classname);
+	public function get_controller_actions($controller_classname, $filter_base_methods = true) {
+		$controller_classname = $this->get_controller_classname($controller_classname);
+		$methods              = get_class_methods($controller_classname);
 
-		if(isset($methods) && !empty($methods))
-		{
-    		if($filter_base_methods)
-    		{
-    			$baseMethods = get_class_methods('Controller');
+		if(isset($methods) && !empty($methods)) {
+  		if($filter_base_methods) {
+  			$baseMethods = get_class_methods('Controller');
 
-    			$ctrl_cleaned_methods = array();
-    		    foreach($methods as $method)
-    		    {
-    		        if(!in_array($method, $baseMethods) && strpos($method, '_') !== 0)
-    				{
-    				    $ctrl_cleaned_methods[] = $method;
-    				}
-    		    }
-
-    		    return $ctrl_cleaned_methods;
-    		}
-    		else
-    		{
-    			return $methods;
-    		}
+  			$ctrl_cleaned_methods = array();
+  		   
+				foreach($methods as $method) {
+				
+					if(!in_array($method, $baseMethods) && strpos($method, '_') !== 0) {
+						$ctrl_cleaned_methods[] = $method;
+					}
+				}
+				return $ctrl_cleaned_methods;
+  		} else {
+  			return $methods;
+  		}
 		}
-		else
-		{
-		    return array();
+		else {
+			return array();
 		}
 	}
 
-	function get_plugin_controllers_actions($plugin_controller,$filter_default_controller = true)
-	{
-
+	public function get_plugin_controllers_actions($plugin_controller,$filter_default_controller = true) {
 		$plugin_controllers_actions = array();
 
 		$plugin_name     = $this->getPluginName($plugin_controller['name']);
 		$controller_name = $this->getPluginControllerName($plugin_controller['name']);
 
-		if(!$filter_default_controller || $plugin_name != $controller_name)
-		{
+		if(!$filter_default_controller || $plugin_name != $controller_name) {
 			$controller_class_name = $controller_name . 'Controller';
 
 			$ctrl_cleaned_methods = $this->get_controller_actions($controller_class_name);
 
-			foreach($ctrl_cleaned_methods as $action)
-			{
+			foreach($ctrl_cleaned_methods as $action) {
 				$plugin_controllers_actions[] = $action;
 			}
 		}
@@ -354,38 +325,29 @@ class MenusController extends MenubuilderAppController{
 		return $plugin_controllers_actions;
 	}
 
+	public function get_controller_classname($controller_name){
 
-
-	function get_controller_classname($controller_name){
-
-	    if(strrpos($controller_name, 'Controller') !== strlen($controller_name) - strlen('Controller'))
-	    {
-	        /*
-	         * If $controller does not already end with 'Controller'
-	         */
-
-    	    if(stripos($controller_name, '/') === false)
-    	    {
-    	        $controller_classname = $controller_name . 'Controller';
-    	    }
-    	    else
-    	    {
-    	        /*
-    	         * Case of plugin controller
-    	         */
-    	        $controller_classname = substr($controller_name, strripos($controller_name, '/') + 1) . 'Controller';
-    	    }
-
-    	    return $controller_classname;
+    if(strrpos($controller_name, 'Controller') !== strlen($controller_name) - strlen('Controller'))
+    {
+      /*
+       * If $controller does not already end with 'Controller'
+       */
+	    if(stripos($controller_name, '/') === false) {
+	      $controller_classname = $controller_name . 'Controller';
+	    } else {
+        /*
+         * Case of plugin controller
+         */
+        $controller_classname = substr($controller_name, strripos($controller_name, '/') + 1) . 'Controller';
 	    }
-	    else
-	    {
-	        return $controller_name;
-	    }
+
+	    return $controller_classname;
+    } else {
+    	return $controller_name;
+    }
 	}
 
-	function getPluginName($ctrlName = null)
-	{
+	public function getPluginName($ctrlName = null) {
 		$arr = String::tokenize($ctrlName, '/');
 		if (count($arr) == 2) {
 			return $arr[0];
@@ -394,8 +356,7 @@ class MenusController extends MenubuilderAppController{
 		}
 	}
 
-	function getPluginControllerName($ctrlName = null)
-	{
+	public function getPluginControllerName($ctrlName = null) {
 		$arr = String::tokenize($ctrlName, '/');
 		if (count($arr) == 2) {
 			return $arr[1];
@@ -409,19 +370,17 @@ class MenusController extends MenubuilderAppController{
 	 * save menu,triggered via ajax
 	 * return success or error
 	 * */
-	function ajax_save(){
+	public function ajax_save(){
 		$this->render(false, false);
 
 		if( $this->request->isPost() ) {
 			if( $this->Menu->exists($this->request->data['id']) ) {
 				//save the menu name
 				$menu = $this->Menu->read(null, $this->request->data['id']);
-				$this->Menu->save(
-					array(
-						'name' =>  $this->request->data['name']
-					)
-				);
-				//save the menu items
+				
+				$this->Menu->save(array('name' =>  $this->request->data['name']));
+
+				// save the menu items
 				$get_items = function( $items, $menu_id, $parent_id = '', $nested = false) use (&$get_items) {
 					$_items = array();
 
@@ -443,12 +402,7 @@ class MenusController extends MenubuilderAppController{
 
 	      //clear previous menu items before insert
 	      $this->Menuitem->recursive = -1;
-	      if( $this->Menuitem->deleteAll(
-	      	array(
-	        	"menu_id" => $this->Menu->id
-	        ),
-	        false //do not cascade
-	      ) ) {
+	      if( $this->Menuitem->deleteAll(array("menu_id" => $this->Menu->id), false) ) {
 	      	$this->Menuitem->saveAll(
 	      		$get_items($this->request->data['items'], $this->Menu->id )
 	      	);
@@ -468,18 +422,8 @@ class MenusController extends MenubuilderAppController{
 							'menu_options_list' => $this->Menuitem->make_options_list($menu_tree)
 						)
 					);
-
 	      }
-
-
 			}
 		}
-
 	}
-
-
-
 }
-
-
-
